@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.checkbox_css{
+    @apply checkbox mr-2 border-black [--chkbg:theme(colors.black)] [--chkfg:white]; 
+}
+
+.no-bg-change:focus {
+    background-color: inherit !important;
+    text-color: inherit !important;
+  }
+  /* Prevent background color change on active */
+  .no-bg-change:active {
+    background-color: inherit !important;
+    text-color: inherit !important;
+  }
