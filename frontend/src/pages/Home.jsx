@@ -29,36 +29,37 @@ function Home() {
   return (
     <div>
       
-      <NavBar />
+       <NavBar />
         
-      <div className='grid grid-cols-12 '>
+      {/* <div className='grid grid-cols-12 '>
         <SearchBar setSearch={setSearch} />
       </div>
       <div className='grid grid-cols-12 mx-5'>
-      <SideBar selectCategory={selectCategory} setSelectCategory={setSelectCategory} checkboxes={checkboxes} setCheckboxes={setCheckboxes} />
-
-      <div className='col-span-9 grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-10'>
+      {/* <SideBar selectCategory={selectCategory} setSelectCategory={setSelectCategory} checkboxes={checkboxes} setCheckboxes={setCheckboxes} /> */}
+      <div className='grid grid-cols-12'>
+      <div className='col-start-2 col-span-10  grid grid-cols-4 gap-5 mt-10'>
 
       {items.map(item => {
         return (
-          <div className="card bg-base-100 bg-gray-200 border-2 border-gray-200 text-black">
+          <div className="card bg-white shadow-md outline-black text-black ">
             
-              <img src="https://th.bing.com/th/id/OIP.p85NSH7Ra7R4fouWWuUd0wHaJo?rs=1&pid=ImgDetMain" className='aspect-[4/3] object-cover bg-white rounded-2xl' alt={item.name} />
+              <img src="https://th.bing.com/th/id/OIP.p85NSH7Ra7R4fouWWuUd0wHaJo?rs=1&pid=ImgDetMain" className='aspect-[4/3] object-cover bg-black rounded-2xl mx-4 mt-4' alt={item.name} />
 
             <div className="card-body p-4 pt-3">
               <h2 className="card-title font-semibold text-2xl">Rs{item.price}</h2>
               <div className='font-medium'>{item.name} | {item.description}</div>
               <div className="card-actions justify-end items-end">
-``
-                <button className="btn btn-primary bg-black text-white border-0 hover:bg-white hover:text-black">Buy Now</button>
+                <button className="btn btn-primary border-0 bg-black text-white  hover:bg-gray-800 ">Buy Now</button>
               </div>
             </div>
           </div>
         )
       })}
       </div>
+      </div> 
       </div>
-    </div>
+    // </div>
+
   )
 }
 

@@ -16,3 +16,10 @@
     background-color: inherit !important;
     text-color: inherit !important;
   }
+/* 
+  .no-outline:focus {
+    outline: 0 !important;
+  }
+  .no-outline:active {
+    outline: 0 !important;
+  } */

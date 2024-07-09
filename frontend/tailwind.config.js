@@ -13,5 +13,13 @@ export default {
   },
   plugins: [
     require('daisyui'),
-  ],
+      function ({ addUtilities }) {
+        addUtilities({
+          '.no-outline': {
+            outline: 'none !important',
+            border: 'none !important',
+          },
+        })
+      },
+    ],
 }
