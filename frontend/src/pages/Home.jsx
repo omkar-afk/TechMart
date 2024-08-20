@@ -1,6 +1,7 @@
 import React from 'react'
 import {useState,useEffect} from 'react'
 import axios from 'axios'
+import cookie from 'js-cookie'
 import SearchBar from '../components/SearchBar'
 import NavBar from '../components/NavBar'
 import { ELECTRONICS_TYPE } from '../utils/constant'
@@ -18,8 +19,7 @@ function Home() {
 
   useEffect(() => {
     const type = Object.keys(checkboxes).filter(key => checkboxes[key] === true)
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdmYjU5NWZkNjFmMzIzMjA0ZWNiY2UiLCJmaXJzdE5hbWUiOiJPbWthciIsImxhc3ROYW1lIjoiRGVzaG11a2giLCJlbWFpbCI6Im9ta2FyZGVzaG11a2g3ODkwQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjo3NzU2ODM0NTcwLCJfX3YiOjAsImlhdCI6MTcyMDA5MDg1NCwiZXhwIjoxNzIwNjk1NjU0fQ.GQ9andPANRsgC6EKQpdqBEQyK5loIv_LNtRlhC6RCGs"
-    axios.get(`http://localhost:3000/api/electronics/get/${search}`,{params:type,headers:{'Authorization':`Bearer ${token}`}})
+    axios.get(`http://localhost:3000/api/electronics/get/${search}`,{params:type})
     .then(res => {const duplicatedItems = Array(10).fill([...res.data.body]).flat();
       setItems(duplicatedItems);});
 
@@ -58,7 +58,6 @@ function Home() {
       </div>
       </div> 
       </div>
-    // </div>
 
   )
 }

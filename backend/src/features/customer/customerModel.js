@@ -25,7 +25,7 @@ module.exports = (mongoose)=>{
         },
         phoneNumber: {
           type: Number,
-          required: true,
+          required: false,
           trim: true,
         },
       });

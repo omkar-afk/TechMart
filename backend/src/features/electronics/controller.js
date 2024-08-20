@@ -16,7 +16,16 @@ const getElectronicsByType = async (request, response) => {
     response.send(new Success(responsePayload));
 }
 
+const getElectronicsBySuggestion   = async (request, response) => {
+    const search = request.params.searchText;
+    // console.log("types",types,"search" , search)
+    const res = await electronicService.getElectronicsBySuggestion(search);
+    const responsePayload = JSON.parse(JSON.stringify(res));
+    response.send(new Success(responsePayload));
+}
+
 module.exports = {
     createElectronic,
-    getElectronicsByType
+    getElectronicsByType,
+    getElectronicsBySuggestion
 }

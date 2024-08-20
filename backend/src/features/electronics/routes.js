@@ -15,6 +15,10 @@ electronicRouter.post(
 
 electronicRouter.get(
     '/electronics/get/:searchText',
-    wrap(jwtGuard),
     wrap(controller.getElectronicsByType));
+
+electronicRouter.get(
+        '/electronics/getSuggestion/:searchText',
+        wrap(controller.getElectronicsBySuggestion));
+    
 module.exports = electronicRouter;

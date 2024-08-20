@@ -16,6 +16,10 @@
     background-color: inherit !important;
     text-color: inherit !important;
   }
+
+  .tooltip:before {
+    @apply whitespace-pre-line text-left;
+}
 /* 
   .no-outline:focus {
     outline: 0 !important;

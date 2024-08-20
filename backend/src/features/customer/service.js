@@ -4,15 +4,27 @@ const { InternalServerError, AccessRestrictedError } = require('../../utils/apiR
 const { generateToken } = require('../../utils/jwt');
 const signupCustomer = async (body) => {
     try {
-        const { password } = body;
+        const { email, password } = body;
+
+        // Check if email already exists
+        const existingCustomer = await db.customer.findOne({ email });
+        if (existingCustomer) {
+            throw new Error('Email already exists');
+        }
+
+        // If email doesn't exist, proceed with customer creation
         const hash = await hashPassword(password);
         body.password = hash;
         const customer = await db.customer.create(body);
         const deepCopyCustomer = JSON.parse(JSON.stringify(customer));
         delete deepCopyCustomer.password;
         const jwt = generateToken(deepCopyCustomer)
-        return {jwt};
-    } catch (e){
+        return { jwt };
+    } catch (e) {
+        if (e.message === 'Email already exists') {
+            throw new ConflictError('Email already exists');
+        }
+        console.log(e.message);
         throw new InternalServerError(e.message || "Error creating customer");
     }
 };
