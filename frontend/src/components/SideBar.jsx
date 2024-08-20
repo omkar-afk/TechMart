@@ -35,7 +35,7 @@ function SideBar({selectCategory, setSelectCategory, checkboxes,setCheckboxes}) 
       , [selectCategory])
 
   return (
-    <div className='col-span-3 mr-5'>
+    <div className='col-span-3 ml-10'>
     <div className='mt-2 '>
         <div tabIndex={0} className={`collapse border  mt-10 ${sideBarCss}`} >
           <div className="collapse-title pr-4 text-xl font-medium flex items-center">

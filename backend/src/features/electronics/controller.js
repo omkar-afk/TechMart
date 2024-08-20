@@ -15,7 +15,12 @@ const getElectronicsByType = async (request, response) => {
     const responsePayload = JSON.parse(JSON.stringify(res));
     response.send(new Success(responsePayload));
 }
-
+const getElectronics = async (request , response)=> {
+    // console.log("types",types,"search" , search)
+    const res = await electronicService.getElectronics();
+    const responsePayload = JSON.parse(JSON.stringify(res));
+    response.send(new Success(responsePayload));
+}
 const getElectronicsBySuggestion   = async (request, response) => {
     const search = request.params.searchText;
     // console.log("types",types,"search" , search)
@@ -27,5 +32,7 @@ const getElectronicsBySuggestion   = async (request, response) => {
 module.exports = {
     createElectronic,
     getElectronicsByType,
-    getElectronicsBySuggestion
+    getElectronicsBySuggestion,
+    getElectronics
+    
 }

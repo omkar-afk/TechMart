@@ -4,7 +4,7 @@ import InputSearchBox from './InputSearchBox';
 import InputAddressBox from './InputAddressBox';
 import cookie from 'js-cookie';
 
-function NavBar() {
+function NavBar({search}) {
     const { user} = useUser(); // Ensure this matches the context
 
     return (
@@ -13,7 +13,7 @@ function NavBar() {
                 <div className="flex-1">
                     <a className="btn btn-ghost font-bold text-2xl mr-3">TechMart</a>
                     <InputAddressBox />
-                    <InputSearchBox />
+                    <InputSearchBox suggest={search}/>
                 </div>
                 {user ? <RightSideNavbar /> : <a href="/signin" className="btn btn-ghost text-xl">Login</a>}
             </div>

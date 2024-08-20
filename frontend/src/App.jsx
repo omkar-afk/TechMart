@@ -14,7 +14,8 @@ function App() {
         <Routes>
           <Route path='/signin' element={<Signin />} />
           <Route path='/signup' element={<Signup />} />
-          <Route path='/' element={<Home />} />   
+          <Route path='/' element={<Home />} />
+          <Route path= "/:searchValue" element= {<Home />} />
         </Routes>
         </UserProvider>
       </BrowserRouter>

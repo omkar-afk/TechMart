@@ -30,6 +30,14 @@ const escapeRegex = (string) => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
 
+const getElectronics = async()=>{
+  try{
+    return await db.electronics.find({});
+  }catch(e){
+    throw new InternalServerError(e.message ||"Error creating electronic");
+  }
+}
+
 
 const autocomplete = async (search) => {
   const escapedSearch = escapeRegex(search);
@@ -96,5 +104,6 @@ const getElectronicsBySuggestion = async (search) => {
 module.exports = {
     createElectronic,
     getElectronicsByType,
-    getElectronicsBySuggestion
+    getElectronicsBySuggestion,
+    getElectronics
 }

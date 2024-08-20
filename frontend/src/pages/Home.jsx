@@ -1,21 +1,23 @@
-import React from 'react'
+import React, { Children } from 'react'
 import {useState,useEffect} from 'react'
 import axios from 'axios'
-import cookie from 'js-cookie'
-import SearchBar from '../components/SearchBar'
+import { useParams } from 'react-router-dom'
 import NavBar from '../components/NavBar'
 import { ELECTRONICS_TYPE } from '../utils/constant'
 import SideBar from '../components/SideBar'
 function Home() {
   const [items, setItems] = useState([])
-  const [search, setSearch] = useState(' ')
+  const [search, setSearch] = useState("")
+  const {searchValue} = useParams();
+  if(searchValue && searchValue != search){
+      setSearch(searchValue)
+  }else if(!searchValue && search != ""){
+    setSearch("")
+  }
   let initialCheckboxState = {}
   Object.values(ELECTRONICS_TYPE).forEach((type)=>{initialCheckboxState[type] = true })
   const [checkboxes, setCheckboxes] = useState(initialCheckboxState);
   const [selectCategory, setSelectCategory] = useState(true)
-  
-
-    
 
   useEffect(() => {
     const type = Object.keys(checkboxes).filter(key => checkboxes[key] === true)
@@ -25,20 +27,13 @@ function Home() {
 
   }, [search, checkboxes])
 
-  
   return (
     <div>
       
-       <NavBar />
-        
-      {/* <div className='grid grid-cols-12 '>
-        <SearchBar setSearch={setSearch} />
-      </div>
-      <div className='grid grid-cols-12 mx-5'>
-      {/* <SideBar selectCategory={selectCategory} setSelectCategory={setSelectCategory} checkboxes={checkboxes} setCheckboxes={setCheckboxes} /> */}
-      <div className='grid grid-cols-12'>
-      <div className='col-start-2 col-span-10  grid grid-cols-4 gap-5 mt-10'>
-
+       <NavBar search = {search}/>
+      
+      
+      <Wrapper condition= {searchValue}selectCategory = {selectCategory} setSelectCategory ={setSelectCategory}checkboxes = {checkboxes} setCheckboxes = {setCheckboxes}>
       {items.map(item => {
         return (
           <div className="card bg-white shadow-md outline-black text-black ">
@@ -55,11 +50,35 @@ function Home() {
           </div>
         )
       })}
-      </div>
-      </div> 
+      </Wrapper>
       </div>
 
+      // </div>
   )
 }
-
+const Wrapper = ({ children, condition, selectCategory, setSelectCategory, checkboxes, setCheckboxes }) => (
+  condition ? (
+    <div className='grid grid-cols-12 mx-5'>
+      <SideBar 
+        selectCategory={selectCategory} 
+        setSelectCategory={setSelectCategory} 
+        checkboxes={checkboxes} 
+        setCheckboxes={setCheckboxes} 
+      /> <div className='col-span-9'>
+      <div className='grid grid-cols-12'>
+      <div className='col-start-2 col-span-10 grid grid-cols-3 gap-5 mt-10'>
+        {children}
+      </div>
+      </div>
+    </div>
+      
+    </div>
+  ) : (
+    <div className='grid grid-cols-12'>
+      <div className='col-start-2 col-span-10 grid grid-cols-4 gap-5 mt-10'>
+        {children}
+      </div>
+    </div>
+  )
+);
 export default Home;

@@ -18,6 +18,9 @@ electronicRouter.get(
     wrap(controller.getElectronicsByType));
 
 electronicRouter.get(
+        '/electronics/get',
+        wrap(controller.getElectronics));
+electronicRouter.get(
         '/electronics/getSuggestion/:searchText',
         wrap(controller.getElectronicsBySuggestion));
     
