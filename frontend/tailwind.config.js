@@ -17,7 +17,7 @@ export default {
         addUtilities({
           '.no-outline': {
             outline: 'none !important',
-            border: 'none !important',
+            // border: 'none !important',
           },
         })
       },

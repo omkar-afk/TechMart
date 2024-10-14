@@ -1,30 +1,50 @@
-import React,{useContext,useState,createContext, useEffect} from 'react'
-import  cookie  from 'js-cookie';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import cookie from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 
-const UserContext = createContext()
+const UserContext = createContext();
 
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const UserProvider = ({children}) => {
-    const [user,setUser] = useState(null)
-    const [jwt,setJwt] = useState(null);
-    useEffect(() => {
-        try{
-            const token = cookie.get('token');
-            setUser({...jwtDecode(token),jwt:token});
-        }catch(e){
-            setUser(null)
-            console.log(e.message)
-        }   
-    }, [jwt]);
+  useEffect(() => {
+    const loadUser = () => {
+      try {
+        const token = cookie.get('token');
+        if (token) {
+          const decodedUser = jwtDecode(token);
+          setUser({ ...decodedUser, jwt: token });
+        } else {
+          setUser(null);
+        }
+      } catch (e) {
+        console.error('Error decoding token:', e);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return (
-        <UserContext.Provider value={{user,setUser,setJwt}}>
-            {children}
-        </UserContext.Provider>
-    )
-}
+    loadUser();
+  }, []);
 
-const useUser = () => useContext(UserContext)
+  const login = (token) => {
+    cookie.set('token', token, { expires: 7 }); // Set cookie to expire in 7 days
+    const decodedUser = jwtDecode(token);
+    setUser({ ...decodedUser, jwt: token });
+  };
 
-export {UserProvider,useUser}
+  const logout = () => {
+    cookie.remove('token');
+    setUser(null);
+  };
+
+  return (
+    <UserContext.Provider value={{ user, loading, login, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUser = () => useContext(UserContext);

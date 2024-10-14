@@ -1,6 +1,8 @@
 import Signin from "./pages/Signin";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import Product from "./pages/Product";
+import Setting from "./pages/Setting";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { UserProvider } from './context/UserContext'
@@ -16,6 +18,8 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='/' element={<Home />} />
           <Route path= "/:searchValue" element= {<Home />} />
+          <Route path= "/product/:id" element= {<Product />} />
+          <Route path="/setting" element ={<Setting/>}/>
         </Routes>
         </UserProvider>
       </BrowserRouter>
