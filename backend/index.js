@@ -5,6 +5,7 @@ const errorHandler = require('./src/middleware/error');
 const apiRouter = require('./src/router');
 
 const app = express();
+
 app.use(express.json());
 app.use(cors());
 
