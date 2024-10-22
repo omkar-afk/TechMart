@@ -14,4 +14,6 @@ const ELECTRONICS_TYPE = Object.freeze({
     WASHING_MACHINES: "Washing Machines"
 });
 
-export default ELECTRONICS_TYPE;
+const backendUrl = "http://localhost:3000";
+
+export { backendUrl, ELECTRONICS_TYPE };

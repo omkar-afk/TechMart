@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import NavBar from "../components/NavBar";
-import ELECTRONICS_TYPE from "../../src/assets/constants";
+import { ELECTRONICS_TYPE, backendUrl } from "../../src/assets/constants";
 
 function Postadd() {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -65,8 +65,16 @@ function Postadd() {
       try {
         // Call API to submit form data
         console.log("Submitting form data", formData);
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await axios.post(`${backendUrl}/post/add`,formData);
+        await Promise.all((selectedFiles || []).map((file) => {
+          const formData = new FormData();
+          formData.append('file', file);
+          return axios.post(`${backendUrl}/upload`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        }));
         alert("Post added successfully!");
       } catch (error) {
         console.error("Error submitting post:", error);
