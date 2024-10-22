@@ -20,11 +20,15 @@ electronicRouter.get(
 electronicRouter.get(
         '/electronics/get',
         wrap(controller.getElectronics));
+
 electronicRouter.get(
         '/electronics/getSuggestion/:searchText',
         wrap(controller.getElectronicsBySuggestion));
-        electronicRouter.get(
-            '/electronics/post/add',
-            wrap(controller.postadd));
+electronicRouter.post(
+    '/electronics/post/add',
+            wrap(controller.postAdd));
+electronicRouter.get(
+    '/electronics/get/item/:id',
+    (controller.getElectronicsById));
     
 module.exports = electronicRouter;

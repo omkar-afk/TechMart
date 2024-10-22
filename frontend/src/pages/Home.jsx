@@ -5,6 +5,7 @@ import { useParams,useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { ELECTRONICS_TYPE } from "../utils/constant";
 import SideBar from "../components/SideBar";
+import { backendUrl } from "../assets/constants";
 
 function Home() {
   const navigate = useNavigate();
@@ -83,7 +84,7 @@ function Home() {
             return (
               <div className="card bg-white shadow-md outline-black text-black ">
                 <img
-                  src="https://th.bing.com/th/id/OIP.p85NSH7Ra7R4fouWWuUd0wHaJo?rs=1&pid=ImgDetMain"
+                  src={`${backendUrl}${item.images.url}`}
                   className="aspect-[4/3] object-cover  rounded-2xl mx-4 mt-4"
                 />
                 <div className="card-body p-4 pt-3">

@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import NavBar from "../components/NavBar";
 import { ELECTRONICS_TYPE, backendUrl } from "../../src/assets/constants";
-
+import axios from "axios";
+import { useUser } from "../context/UserContext";
 function Postadd() {
+  const { user, } = useUser();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-
+  console.log(user);
   const [formData, setFormData] = useState({
     name: { val: "", valid: true },
     description: { val: "", valid: true },
@@ -64,17 +66,31 @@ function Postadd() {
     if (isValid) {
       try {
         // Call API to submit form data
-        console.log("Submitting form data", formData);
-        await axios.post(`${backendUrl}/post/add`,formData);
-        await Promise.all((selectedFiles || []).map((file) => {
-          const formData = new FormData();
-          formData.append('file', file);
-          return axios.post(`${backendUrl}/upload`, formData, {
+        const uploadResponses = await Promise.all((selectedFiles || []).map((file) => {
+          const nformData = new FormData();
+          nformData.append('file', file);
+          return axios.post(`${backendUrl}/api/upload`, nformData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
         }));
+        const images = uploadResponses.map((res) => res.data.filePath);
+        console.log(images)
+        let newFormData = {};
+        Object.keys(formData).forEach((key) => {
+
+          newFormData[key] = formData[key].val;
+        });
+        newFormData.owner = user._id; // Hardcoded owner ID
+        newFormData.customerAddress = "60f1b0b3b3b3b40015f1b3b3"; // Hardcoded address ID
+        newFormData.status = "available"; // Default status
+        newFormData.images = images;
+        console.log("Submitting form data", newFormData);
+
+        const res = await axios.post(`${backendUrl}/api/electronics/post/add`,newFormData);
+        console.log("Response:", res.data);
+        
         alert("Post added successfully!");
       } catch (error) {
         console.error("Error submitting post:", error);

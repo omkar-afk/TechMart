@@ -35,11 +35,19 @@ const postAdd   = async (request, response) => {
     const responsePayload = JSON.parse(JSON.stringify(res));
     response.send(new Success(responsePayload));
 }
+
+const getElectronicsById = async (request, response) => {
+    const id = request.params.id;
+    const res = await electronicService.getElectronicsById(id);
+    const responsePayload = JSON.parse(JSON.stringify(res));
+    response.send(new Success(responsePayload));
+}
 module.exports = {
     createElectronic,
     getElectronicsByType,
     getElectronicsBySuggestion,
     getElectronics,
-    postAdd
+    postAdd,
+    getElectronicsById
     
 }

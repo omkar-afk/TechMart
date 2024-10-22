@@ -13,6 +13,19 @@ const createElectronic = async (payload) => {
    
 }
 
+//get image and electronics based on electronics id
+const getElectronicsById = async (id) => {
+  try {
+    const images = await db.images.find({ electronicId: id });
+    console.log("images", images);
+    const electronic = await db.electronics.findById(id).lean();
+    return { ...electronic, images };
+  }
+  catch (e) {
+    throw new InternalServerError(e.message || "Error creating electronic");
+  }
+}
+
 const getElectronicsByType = async (types,search) => {  
     try{
         types = [...Object.values(types)]
@@ -32,7 +45,25 @@ const escapeRegex = (string) => {
 
 const getElectronics = async()=>{
   try{
-    return await db.electronics.find({});
+    const imagesData = await db.images.find().populate('electronicId');
+    const myMap = new Map();
+    // console.log("images", imagesData);
+    
+    imagesData.forEach(image => {
+      if (!myMap.has(image.electronicId)) {
+        myMap.set(image.electronicId, [{ url: image.url,_id:image._id }]);
+      }
+    });
+    //traverse the map
+    let images = [];
+    for (let [key, value] of myMap) {
+      if(key != null){
+      let electronic = key.toObject();
+      electronic.images = value[0];
+      images.push(electronic);
+      }
+    } 
+return images;
   }catch(e){
     throw new InternalServerError(e.message ||"Error creating electronic");
   }
@@ -104,22 +135,39 @@ const getElectronicsBySuggestion = async (search) => {
 const postAdd = async (req) => {
   try {
     let payload = req.body;
-    payload = {...main, images};
-    console.log("payload",payload)
+    let { images, ...main } = payload;
+    console.log("payload", main);
+
+    // Create the electronic record first
     const electronic = await db.electronics.create(main);
-    images.forEach(async(image) => {image.electronicId = electronic._id;});
-    Promise.all(images.map( (image) =>  db.images.create(image)));
-    return {"status":"completed"};
+    console.log("-------------------");
+
+    // Update images to be objects with the required structure
+    images = images.map((image) => ({
+      url: image, // assuming image is currently a string representing the URL
+      electronicId: electronic._id,
+    }));
+
+    console.log("images", images);
+    console.log(db.images);
+
+    // Save all images to the database
+    await Promise.all(images.map((image) => db.images.create(image)));
+    console.log("images---------------");
+
+    return { "status": "completed" };
   } catch (e) {
     console.error(e);
-    throw new InternalServerError(e.message ||"Error creating electronic"); 
+    throw new InternalServerError(e.message || "Error creating electronic");
   }
 };
+
 
 module.exports = {
     createElectronic,
     getElectronicsByType,
     getElectronicsBySuggestion,
     getElectronics,
-    postAdd
+    postAdd,
+    getElectronicsById
 }

@@ -6,6 +6,8 @@ import Setting from "./pages/Setting";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./context/UserContext";
 import Postadd from "./pages/Postadd";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
   return (
@@ -18,8 +20,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/:searchValue" element={<Home />} />
             <Route path="/product/:id" element={<Product />} />
-            <Route path="/setting" element={<Setting />} />
-            <Route path="/postadd" element={<Postadd />} />
+            <Route path="/setting" element={<ProtectedRoute element={<Setting/>} />} />
+            <Route path="/postadd" element={<ProtectedRoute element={<Postadd/>} />} /> 
           </Routes>
         </UserProvider>
       </BrowserRouter>
