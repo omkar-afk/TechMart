@@ -39,6 +39,9 @@ const RightSideNavbar = ({ logout }) => {
       <div className="tooltip tooltip-bottom mr-4" data-tip="chat">
         <button className='btn btn-ghost pt-1'><i className="fa-regular fa-comment fa-2xl"></i></button>
       </div>
+      <div className="tooltip tooltip-bottom mr-4" data-tip="Sell">
+        <button className='btn btn-ghost pt-1 font-bold text-xl' onClick={()=> navigate('/postadd')}>Sell</button>
+      </div>
       <div className="dropdown dropdown-end">
         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
           <div className="w-24 rounded-full">

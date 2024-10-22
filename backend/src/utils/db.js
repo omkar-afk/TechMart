@@ -8,5 +8,5 @@ db.mongoose = mongoose;
 db.customer = require('../features/customer/customerModel')(mongoose);
 db.electronics = require('../features/electronics/electronicsModel')(mongoose);
 db.customerAddress = require('../features/customer/customerAddressModel')(mongoose);
-
+db.images = require('../features/electronics/imagesModel').Image
 module.exports = db;

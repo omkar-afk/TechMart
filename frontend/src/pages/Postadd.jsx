@@ -1,25 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import NavBar from "../components/NavBar";
 import ELECTRONICS_TYPE from "../../src/assets/constants";
 
 function Postadd() {
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     name: { val: "", valid: true },
     description: { val: "", valid: true },
     price: { val: "", valid: true },
     type: { val: "", valid: true },
   });
+
+  const fileInputRef = useRef(null); // Reference for the hidden file input
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
+
   const handleImageChange = (e) => {
-    setSelectedFiles((prev)=>[...prev,e.target.files[0]]);
+    const files = Array.from(e.target.files);
+    setSelectedFiles((prev) => [...prev, ...files]);
+    e.target.value = ""; // Clear input to allow re-selection
   };
+
+  const removeImage = (indexToRemove) => {
+    setSelectedFiles((prevSelectedFiles) =>
+      prevSelectedFiles.filter((_, index) => index !== indexToRemove)
+    );
+    // No need to clear the input value, as it's hidden
+  };
+
   useEffect(() => {
-    const previews = selectedFiles.map((file) => URL.createObjectURL(file));
-    console.log(previews)
+    const previews = selectedFiles.map((file) => {
+      if (file instanceof Blob) {
+        return URL.createObjectURL(file);
+      }
+      return null;
+    }).filter(src => src !== null);
     setPreviewImages(previews);
-    }, [selectedFiles]);
+  }, [selectedFiles]);
 
   // Handle form field changes
   const handleChange = (event) => {
@@ -83,7 +101,7 @@ function Postadd() {
                   {isDropdownOpen && (
                     <ul
                       tabIndex={0}
-                      className="dropdown-content menu rounded-box z-[1] w-52 p-2 shadow min-w-[23vw] bg-gray-50"
+                      className="dropdown-content menu rounded-box z-[1] w-52 p-2 shadow min-w-[23vw] bg-gray-50 "
                     >
                       {Object.values(ELECTRONICS_TYPE).map((type) => (
                         <li key={type}>
@@ -114,7 +132,7 @@ function Postadd() {
                 <input
                   type="text"
                   className={`input input-bordered min-w-[23vw] text-bg no-outline font-semibold bg-white mr-[8vw]`}
-                  name="name"
+                  name="description" // Changed name to "description"
                   onChange={handleChange}
                 />
               </div>
@@ -123,35 +141,39 @@ function Postadd() {
                 <input
                   type="text"
                   className={`input input-bordered min-w-[23vw] text-bg no-outline font-semibold bg-white mr-[8vw]`}
-                  name="name"
+                  name="price" // Changed name to "price"
                   onChange={handleChange}
                 />
               </div>
               <div className="flex items-center justify-between font-semibold text-lg mt-4">
                 <div className="pl-[10vw]">Upload Images</div>
-                <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleImageChange}
-        className="block min-w-[23vw] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none mr-[8vw]"
-      />
+                <label className="cursor-pointer min-w-[23vw] bg-black text-white px-4 py-2 rounded-md mr-[8vw]">
+                  Upload File
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    multiple
+                    onChange={handleImageChange} // Fixed to use onChange instead of onClick
+                    className="hidden" // Hides the default file input
+                  />
+                </label>
               </div>
-    <div className="flex items-center justify-between font-semibold text-lg mt-4">
-        <div></div>
-    <div className="grid grid-cols-3 gap-[2vh] mt-2 mr-[8vw]">
-        {previewImages.map((src, index) => (
-          <div key={index} className="relative">
-            <img
-              src={src}
-              alt={`Preview ${index + 1}`}
-              className="h-[13vh] w-[13vh] object-cover rounded-lg shadow-lg"
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-      
+              <div className="flex items-center justify-between font-semibold text-lg mt-4">
+                <div></div>
+                <div className="grid grid-cols-3 gap-[2vh] mt-2 mr-[8vw]">
+                  {previewImages.map((src, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={src}
+                        alt={`Preview ${index + 1}`}
+                        onClick={() => removeImage(index)} // Pass the image index to remove
+                        className="h-[13vh] w-[13vh] object-cover rounded-lg shadow-lg"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               <div className="flex justify-between">
                 <div></div>
@@ -164,7 +186,6 @@ function Postadd() {
                   </button>
                 </div>
               </div>
-
             </div>
           </form>
         </div>

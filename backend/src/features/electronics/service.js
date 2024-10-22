@@ -101,9 +101,25 @@ const getElectronicsBySuggestion = async (search) => {
   }
 };
 
+const postAdd = async (req) => {
+  try {
+    let payload = req.body;
+    payload = {...main, images};
+    console.log("payload",payload)
+    const electronic = await db.electronics.create(main);
+    images.forEach(async(image) => {image.electronicId = electronic._id;});
+    Promise.all(images.map( (image) =>  db.images.create(image)));
+    return {"status":"completed"};
+  } catch (e) {
+    console.error(e);
+    throw new InternalServerError(e.message ||"Error creating electronic"); 
+  }
+};
+
 module.exports = {
     createElectronic,
     getElectronicsByType,
     getElectronicsBySuggestion,
-    getElectronics
+    getElectronics,
+    postAdd
 }

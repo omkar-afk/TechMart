@@ -23,5 +23,8 @@ electronicRouter.get(
 electronicRouter.get(
         '/electronics/getSuggestion/:searchText',
         wrap(controller.getElectronicsBySuggestion));
+        electronicRouter.get(
+            '/electronics/post/add',
+            wrap(controller.postadd));
     
 module.exports = electronicRouter;

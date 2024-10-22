@@ -1,4 +1,5 @@
 const electronicService = require('./service');
+
 const { Success } = require('../../utils/apiResponse');
 const createElectronic = async (request, response) => {
     const payload  = request.body;
@@ -10,7 +11,6 @@ const createElectronic = async (request, response) => {
 const getElectronicsByType = async (request, response) => {
     const types  = request.query;
     const search = request.params.searchText;
-    // console.log("types",types,"search" , search)
     const res = await electronicService.getElectronicsByType(types,search);
     const responsePayload = JSON.parse(JSON.stringify(res));
     response.send(new Success(responsePayload));
@@ -29,10 +29,17 @@ const getElectronicsBySuggestion   = async (request, response) => {
     response.send(new Success(responsePayload));
 }
 
+const postAdd   = async (request, response) => {
+
+    const res = await electronicService.postAdd(request);
+    const responsePayload = JSON.parse(JSON.stringify(res));
+    response.send(new Success(responsePayload));
+}
 module.exports = {
     createElectronic,
     getElectronicsByType,
     getElectronicsBySuggestion,
-    getElectronics
+    getElectronics,
+    postAdd
     
 }
