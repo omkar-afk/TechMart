@@ -91,7 +91,7 @@ function Home() {
                   <h2 className="card-title font-semibold text-2xl">
                     Rs{item.price}
                   </h2>
-                  <div className="font-medium">
+                  <div className="font-medium h-[5vh] overflow-hidden">
                     {item.name} | {item.description}
                   </div>
                   <div className="card-actions justify-end items-end">

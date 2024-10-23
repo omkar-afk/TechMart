@@ -61,6 +61,32 @@ const customerAddressAdd = async (body) => {
     }
 }
 
+const getUserElectronics = async()=>{
+    try{
+      const imagesData = await db.images.find().populate('electronicId');
+      const myMap = new Map();
+      // console.log("images", imagesData);
+      
+      imagesData.forEach(image => {
+        if (!myMap.has(image.electronicId)) {
+          myMap.set(image.electronicId, [{ url: image.url,_id:image._id }]);
+        }
+      });
+      //traverse the map
+      let images = [];
+      for (let [key, value] of myMap) {
+        if(key != null){
+        let electronic = key.toObject();
+        electronic.images = value[0];
+        images.push(electronic);
+        }
+      } 
+  return images;
+    }catch(e){
+      throw new InternalServerError(e.message ||"Error creating electronic");
+    }
+  }
+
 module.exports = {
     signupCustomer,
     signinCustomer,

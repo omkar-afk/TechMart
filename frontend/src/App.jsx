@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./context/UserContext";
 import Postadd from "./pages/Postadd";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MyAd from "./pages/MyAd";
 
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
             <Route path="/product/:id" element={<Product />} />
             <Route path="/setting" element={<ProtectedRoute element={<Setting/>} />} />
             <Route path="/postadd" element={<ProtectedRoute element={<Postadd/>} />} /> 
+            <Route path="/myad" element={<ProtectedRoute element={<MyAd/>} />} /> 
+
           </Routes>
         </UserProvider>
       </BrowserRouter>

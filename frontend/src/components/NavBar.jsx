@@ -49,7 +49,7 @@ const RightSideNavbar = ({ logout }) => {
           </div>
         </div>
         <ul tabIndex={0} className="menu menu-sm dropdown-content bg-gray-200 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-          <li><a className="justify-between no-bg-change">My Ads</a></li>
+          <li><a className="justify-between no-bg-change" onClick={() => navigate('/myad')}>My Ads</a></li>
           <li><a className='no-bg-change' onClick={() => navigate('/setting')}>Settings</a></li>
           <li><button className='no-bg-change' onClick={handleLogout}>Logout</button></li>
         </ul>
