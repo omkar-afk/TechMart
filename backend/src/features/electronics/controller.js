@@ -21,6 +21,13 @@ const getElectronics = async (request , response)=> {
     const responsePayload = JSON.parse(JSON.stringify(res));
     response.send(new Success(responsePayload));
 }
+
+const deleteElectronic = async (request, response) => {
+    const id = request.params.id;
+    const res = await electronicService.deleteElectronic(id);
+    const responsePayload = JSON.parse(JSON.stringify(res));
+    response.send(new Success(responsePayload));
+}
 const getElectronicsBySuggestion   = async (request, response) => {
     const search = request.params.searchText;
     // console.log("types",types,"search" , search)
@@ -35,10 +42,22 @@ const postAdd   = async (request, response) => {
     const responsePayload = JSON.parse(JSON.stringify(res));
     response.send(new Success(responsePayload));
 }
-
+const getElectronicsByOwner = async (request, response) => {
+    const id = request.params.id;
+    const res = await electronicService.getElectronicsByOwner(id);
+    const responsePayload = JSON.parse(JSON.stringify(res));
+    response.send(new Success(responsePayload));
+}
 const getElectronicsById = async (request, response) => {
     const id = request.params.id;
     const res = await electronicService.getElectronicsById(id);
+    const responsePayload = JSON.parse(JSON.stringify(res));
+    response.send(new Success(responsePayload));
+}
+
+const updateStatus = async (request, response) => {
+    const id = request.params.id;
+    const res = await electronicService.updateStatus(id);
     const responsePayload = JSON.parse(JSON.stringify(res));
     response.send(new Success(responsePayload));
 }
@@ -48,6 +67,8 @@ module.exports = {
     getElectronicsBySuggestion,
     getElectronics,
     postAdd,
-    getElectronicsById
-    
+    getElectronicsById,
+    getElectronicsByOwner,
+    updateStatus,
+    deleteElectronic
 }

@@ -5,7 +5,16 @@ const signupCustomer = async (request, response) => {
     const res = await customerService.signupCustomer(payload);
     response.send(new Success(res))
 };
-
+const updateCustomer = async (request, response) => {
+    const payload = request.body;
+    const res = await customerService.updateCustomer(payload);
+    response.send(new Success(res))
+}
+const googleSigninCustomer = async (request, response) => {
+    const payload = request.body;
+    const res = await customerService.googleSigninCustomer(payload);
+    response.send(new Success(res))
+};
 const signinCustomer = async (request, response) => {
     const payload = request.body;
     const res = await customerService.signinCustomer(payload);
@@ -22,5 +31,7 @@ const customerAddressAdd = async (request, response) => {
 module.exports = {
     signinCustomer,
     signupCustomer
-    ,customerAddressAdd
+    ,customerAddressAdd,
+    googleSigninCustomer,
+    updateCustomer
 }

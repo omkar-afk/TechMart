@@ -17,11 +17,11 @@ function Product() {
       console.error("There was an error fetching the product data:", error);
     });
   }, [id]);
-
+  console.log(electronics);
   return (
     <div>
       <NavBar search={""} />
-      <div className="grid grid-cols-12">
+      <div className="grid grid-cols-12 mt-[5vh]">
         <div className="col-start-2 col-span-10 grid mt-10">
           <div className="grid grid-cols-12">
             <div className="col-span-8">
@@ -42,20 +42,44 @@ function Product() {
                   </a>
                 ))}
               </div>
-              <div className="h-[21vh] w-[55vw] mb-[2vh] rounded-lg bg-gray-100">
-                <div></div>
-                type {electronics && electronics.type}
-                description
-                {electronics && electronics.description}
-              </div>
+              
             </div>
             <div className="col-span-4">
               <div className="h-[21vh] w-full mx-[2vh] mb-[2vh] rounded-lg bg-gray-100">
-                price and shirt
+                <div className="pt-[3vh] pl-[5vh] font-bold text-xl">
+                  Type : 
+                </div>
+                <div className="pl-[5vh] pt-[1vh]  text-xl">
+                { electronics && electronics.type}
+                  </div>
+                  <div className="pt-[1vh] pl-[5vh] font-bold text-xl">
+                    name:
+                </div>
+
+                <div className="pl-[5vh] pt-[1vh]  text-xl">
+                { electronics && electronics.name}
+
+                  </div>
               </div>
               <div className="h-[21vh] w-full mx-[2vh] mb-[2vh] rounded-lg bg-gray-100">
+              <div className="pt-[3vh] pl-[5vh] font-bold text-xl">
+                  Description : 
+                </div>
+                <div className="pl-[5vh] pt-[1vh]  text-xl">
+                { electronics && electronics.description}
+                  </div>
+                  
+
+                
               </div>
               <div className="h-[14vh] w-full mx-[2vh] mb-[1vh] rounded-lg bg-gray-100">
+              <div className="pt-[3vh] pl-[5vh] font-bold text-xl">
+                  Owner : { electronics && electronics.owner.firstName} { electronics && electronics.owner.lastName}
+                </div>
+                <div className="pt-[2vh] pl-[5vh] font-bold text-xl">
+                  PhoneNumber : { electronics && electronics.owner.phoneNumber} 
+                </div>
+
               </div>
             </div>
           </div>

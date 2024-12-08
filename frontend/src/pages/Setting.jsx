@@ -9,7 +9,7 @@ function Setting() {
     firstName: { blur: false, val: user?.firstName || "", valid: true },
     lastName: { blur: false, val: user?.lastName || "", valid: true },
     email: { blur: false, val: user?.email || "", valid: true },
-    phone: { blur: false, val: user?.phone || "", valid: true }
+    phone: { blur: false, val: user?.phoneNumber || "", valid: true }
   });
   const [paFormData, setpaFormData] = useState({
     currentpassword: { blur: false, val: "", valid: true },
@@ -22,10 +22,11 @@ function Setting() {
         firstName: { blur: false, val: user.firstName || "", valid: true },
         lastName: { blur: false, val: user.lastName || "", valid: true },
         email: { blur: false, val: user.email || "", valid: true },
-        phone: { blur: false, val: user.phone || "", valid: true }
+        phone: { blur: false, val: user.phoneNumber || "", valid: true }
       });
     }
   }, [user]);
+  console.log(user);
   const multilineStringWithLineBreaks = `1. Min 1 UpperCase \n2. Min 2 lowercase \n3. Min 1 Digit \n4. Min 1 symbol \n5. Min 8 characters`;
   const handleChangepr = (event) => {
     const { name, value } = event.target;
@@ -54,6 +55,7 @@ function Setting() {
       [name]: { ...prevFormData[name], val: value }
     }));
   };
+  // const bay = true
   const handleBlurpa = (event) => {
     const { name, value } = event.target;
     let valid = false;
@@ -61,7 +63,10 @@ function Setting() {
       valid = validator.isStrongPassword(value);
     } else if (name === 'confirmpassword') {
       valid = value === paFormData.newpassword.val;
+    }else if (name === 'currentpassword') {
+      valid = true;
     }
+    console.log(valid);
     setpaFormData((prevFormData) => ({
       ...prevFormData,
       [name]: { ...prevFormData[name], val: value, valid, blur: true }
@@ -74,24 +79,28 @@ function Setting() {
       console.log("Updating profile", pFormData);
       try {
         // Call API to update profile
-        const response = await fetch('/api/update-profile', {
-          method: 'POST',
+        const response = await fetch('http://localhost:3000/api/customer/update', {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${user.jwt}`
           },
           body: JSON.stringify({
+            _id: user._id,
             firstName: pFormData.firstName.val,
             lastName: pFormData.lastName.val,
             email: pFormData.email.val,
-            phone: pFormData.phone.val
+            phoneNumber: pFormData.phone.val
           })
         });
-        
-        if (response.ok) {
-          const updatedUser = await response.json();
-          login(updatedUser.token); // Update user context with new data
+        let newResponse = await response.json();
+
+        console.log(newResponse);
+        if (newResponse.StatusCode === 200) {
+          const updatedUser = newResponse.body;
+          //encode the jwt token
           alert('Profile updated successfully');
+          login(updatedUser.jwt); // Update user context with new data
         } else {
           throw new Error('Failed to update profile');
         }
@@ -106,36 +115,46 @@ function Setting() {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     const isValid = Object.values(paFormData).every(field => field.valid);
+    console.log(isValid);
+    console.log(paFormData);
     if (isValid) {
       console.log("Changing password", paFormData);
       try {
         // Call API to change password
-        const response = await fetch('/api/change-password', {
-          method: 'POST',
+        const response = await fetch('http://localhost:3000/api/customer/update', {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${user.jwt}`
           },
           body: JSON.stringify({
-            currentPassword: paFormData.currentpassword.val,
-            newPassword: paFormData.newpassword.val
+            _id: user._id,
+            currentpassword: paFormData.currentpassword.val,
+            password: paFormData.newpassword.val
           })
         });
-        
-        if (response.ok) {
-          alert('Password changed successfully');
-          setpaFormData({
-            currentpassword: { blur: false, val: "", valid: true },
-            newpassword: { blur: false, val: "", valid: false },
-            confirmpassword: { blur: false, val: "", valid: false }
-          });
-        } else {
+        let newResponse = await response.json();
+        console.log(newResponse);
+        if (newResponse.status === 200) {
+          const updatedUser = newResponse.body;
+          //encode the jwt token
+          login(updatedUser.jwt); // Update user context with new data
+          alert('password updated successfully');
+        } else if (newResponse.status === 403) {
+          alert('password incorrect');
+        }else {
           throw new Error('Failed to change password');
         }
+
       } catch (error) {
         console.error('Error changing password:', error);
         alert('Failed to change password. Please try again.');
       }
+      setpaFormData({
+        currentpassword: { blur: false, val: "", valid: true },
+        newpassword: { blur: false, val: "", valid: false },
+        confirmpassword: { blur: false, val: "", valid: false }
+      });
     } else {
       alert('Please correct the errors in the form before submitting.');
     }
@@ -160,12 +179,14 @@ function Setting() {
                 >
                   Update Profile
                 </div>
+                {!user.password ? (<div></div>):(
                 <div
                   className={`${!profile ? "font-semibold" : "font-light"} cursor-pointer`}
                   onClick={() => setProfile(false)}
                 >
+
                   Change Password
-                </div>
+                </div>)}
               </div>
             </div>
             {profile ? (
@@ -195,8 +216,10 @@ function Setting() {
                   Update Profile
                 </button>
               </form>
-            ) : (
-              <form onSubmit={handlePasswordSubmit} className="w-8/12 pb-2">
+            ) : 
+              //if user.googleLogin is false then show this or allow user to create password
+              !user.password  ? (<div></div>) : (
+                <form onSubmit={handlePasswordSubmit} className="w-8/12 pb-2">
                 <div>
                   {['currentpassword', 'newpassword', 'confirmpassword'].map((field) => (
                     <label key={field} className="form-control pt-0 w-full min-w-80 mx-3">
@@ -228,8 +251,10 @@ function Setting() {
                 <button type="submit" className="btn my-5  ml-3 min-h-2 h-10 w-80 btn-primary border-0 bg-black text-white hover:bg-gray-800">
                   Change Password
                 </button>
-              </form>
-            )}
+                </form>
+              )}
+          
+            
           </div>
         </div>
       </div>

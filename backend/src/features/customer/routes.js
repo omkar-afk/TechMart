@@ -6,7 +6,14 @@ customerRouter.post(
     '/customer/signup',
     wrap(contoller.signupCustomer)
 );
-
+customerRouter.patch(
+    '/customer/update',
+    wrap(contoller.updateCustomer)
+);
+customerRouter.post(
+    '/customer/google',
+    wrap(contoller.googleSigninCustomer)
+);
 customerRouter.post(
     '/customer/signin',
     wrap(contoller.signinCustomer)

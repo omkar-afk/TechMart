@@ -4,7 +4,7 @@ import cookie from 'js-cookie';
 import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import validator from "validator";
-
+import GoogleLogin from '../components/GoogleLoginbut';
 function Signup() {
     const [formData, setFormData] = useState({
         firstName: { value: '', isValid: true, message: '' },
@@ -12,7 +12,7 @@ function Signup() {
         email: { value: '', isValid: true, message: '' },
         password: { value: '', isValid: true, message: '' }
     });
-    const { setJwt } = useUser();
+    const { login } = useUser();
     const navigate = useNavigate();
 
     const passwordRequirements = `1. Min 1 UpperCase
@@ -57,10 +57,11 @@ function Signup() {
                 };
                 const res = await axios.post('http://localhost:3000/api/customer/signup', data);
                 cookie.set('token', res.data.body.jwt);
-                setJwt(res.data.body.jwt);
+                login(res.data.body.jwt);
                 navigate('/');
             } catch (e) {
-                alert(e.response?.status === 403 ? "Signup failed" : "Something went wrong");
+                console.log(e); 
+                alert(e.response.data.message || "Something went wrong");
             }
         } else {
             alert("Please correct the form errors before submitting.");
@@ -105,9 +106,7 @@ function Signup() {
                 </button>
                 
                 <div className="flex flex-col gap-2 w-full">
-                    <button type="button" className="btn min-h-2 h-10 w-full btn-primary border-0 bg-black text-white hover:bg-gray-800">
-                        Sign Up With Google
-                    </button>
+                    <GoogleLogin />
                     <button type="button" onClick={() => navigate("/signin")} className="btn min-h-2 h-10 w-full btn-primary border-0 bg-black text-white hover:bg-gray-800">
                         Sign In
                     </button>

@@ -3,9 +3,11 @@ import NavBar from "../components/NavBar";
 import { ELECTRONICS_TYPE, backendUrl } from "../../src/assets/constants";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 function Postadd() {
   const { user, } = useUser();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
   console.log(user);
   const [formData, setFormData] = useState({
     name: { val: "", valid: true },
@@ -23,7 +25,7 @@ function Postadd() {
     setSelectedFiles((prev) => [...prev, ...files]);
     e.target.value = ""; // Clear input to allow re-selection
   };
-
+  
   const removeImage = (indexToRemove) => {
     setSelectedFiles((prevSelectedFiles) =>
       prevSelectedFiles.filter((_, index) => index !== indexToRemove)
@@ -31,6 +33,12 @@ function Postadd() {
     // No need to clear the input value, as it's hidden
   };
 
+  useEffect(() => {
+    if(!user.phoneNumber){
+      alert("Please add your phone Number first")
+      navigate("/setting")
+    }
+  }, [])
   useEffect(() => {
     const previews = selectedFiles.map((file) => {
       if (file instanceof Blob) {
@@ -92,6 +100,8 @@ function Postadd() {
         console.log("Response:", res.data);
         
         alert("Post added successfully!");
+        navigate("/");
+        
       } catch (error) {
         console.error("Error submitting post:", error);
         alert("Failed to add post. Please try again.");

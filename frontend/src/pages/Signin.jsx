@@ -4,13 +4,13 @@ import cookie from 'js-cookie';
 import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import validator from "validator";
-
+import GoogleLogin from '../components/GoogleLoginbut';
 function Signin() {
     const [formData, setFormData] = useState({
         email: { value: '', isValid: true, message: '' },
         password: { value: '', isValid: true, message: '' }
     });
-    const { setJwt } = useUser();
+    const { login } = useUser();
     const navigate = useNavigate();
 
     const passwordRequirements = `1. Min 1 UpperCase
@@ -42,13 +42,14 @@ function Signin() {
             try {
                 const res = await axios.post('http://localhost:3000/api/customer/signin', {
                     email: formData.email.value,
-                    password: formData.password.value
+                    password: formData.password.value,
+                    googleLogin: false
                 });
                 cookie.set('token', res.data.body.jwt);
-                setJwt(res.data.body.jwt);
+                login(res.data.body.jwt);
                 navigate('/');
             } catch (e) {
-                alert(e.response?.status === 403 ? "Login failed" : "Something went wrong");
+                alert(e.response.data.message || "something went wrong");
             }
         } else {
             alert("Please correct the form errors before submitting.");
@@ -91,9 +92,7 @@ function Signin() {
                 </button>
                 
                 <div className="flex flex-col gap-2 w-full">
-                    <button type="button" className="btn min-h-2 h-10 w-full btn-primary border-0 bg-black text-white hover:bg-gray-800">
-                        Sign In With Google
-                    </button>
+                    <GoogleLogin />
                     <button type="button" onClick={() => navigate("/signup")} className="btn min-h-2 h-10 w-full btn-primary border-0 bg-black text-white hover:bg-gray-800">
                         Sign Up
                     </button>

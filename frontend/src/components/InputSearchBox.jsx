@@ -36,7 +36,7 @@ function InputSearchBox({suggest}) {
 
   return (
     <div className="relative"> 
-      <label className="input text-xl min-w-[20vw] no-outline font-semibold bg-gray-50 rounded-full flex items-center gap-2">
+      <label className="input text-xl min-w-[40vw] no-outline font-semibold bg-gray-50 rounded-full flex items-center gap-2">
         <i className="fa-solid fa-magnifying-glass mr-1 mb-1"></i>
         <input
           ref = {inputRef}
@@ -57,7 +57,7 @@ function InputSearchBox({suggest}) {
       </label>
 
       {suggestions.length > 0 && focus && (
-        <ul className="menu menu-sm rounded-box w-56 absolute top-full left-0 mt-2 z-50 bg-gray-50">
+        <ul className="menu menu-sm rounded-box min-w-[30vw] absolute top-full left-0 mt-2 z-50 bg-gray-50">
           {suggestions.map((item, index) => (
             <li key={index} className="p-2 hover:bg-gray-200 rounded-md hover:cursor-pointer" onClick={() => {link(`/${item.suggestion}`);}}>
               {item.suggestion}

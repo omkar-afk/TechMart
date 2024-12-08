@@ -37,9 +37,7 @@ function Home() {
       })
       .then((res) => {
         setIsLoading(false);
-        const duplicatedItems = Array(10)
-          .fill([...res.data.body])
-          .flat();
+        const duplicatedItems = res.data.body;
         setItems(duplicatedItems);
       });
   }, [search, checkboxes]);

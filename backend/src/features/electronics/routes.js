@@ -28,6 +28,15 @@ electronicRouter.post(
     '/electronics/post/add',
             wrap(controller.postAdd));
 electronicRouter.get(
+    '/electronics/get/owner/:id',
+    wrap(controller.getElectronicsByOwner));
+    electronicRouter.patch(
+        '/electronics/patch/:id',
+        wrap(controller.updateStatus));
+electronicRouter.delete(
+    '/electronics/delete/:id',
+    wrap(controller.deleteElectronic));
+electronicRouter.get(
     '/electronics/get/item/:id',
     (controller.getElectronicsById));
     

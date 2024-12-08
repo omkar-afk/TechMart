@@ -2,7 +2,6 @@ const db = require('../../utils/db');
 const {InternalServerError} = require('../../utils/apiResponse');
 const e = require('express');
 
-
 const createElectronic = async (payload) => {
     try{
         const electronic = await db.electronics.create(payload);
@@ -16,9 +15,9 @@ const createElectronic = async (payload) => {
 //get image and electronics based on electronics id
 const getElectronicsById = async (id) => {
   try {
-    const images = await db.images.find({ electronicId: id });
+    const images = await db.images.find({ electronicId: id }).lean();
     console.log("images", images);
-    const electronic = await db.electronics.findById(id).lean();
+    const electronic = await db.electronics.findById(id).populate("owner").lean();
     return { ...electronic, images };
   }
   catch (e) {
@@ -45,7 +44,10 @@ const escapeRegex = (string) => {
 
 const getElectronics = async()=>{
   try{
-    const imagesData = await db.images.find().populate('electronicId');
+    const imagesData = await db.images.find().populate({
+      path: 'electronicId',
+      match: { status: 'available' }
+    });
     const myMap = new Map();
     // console.log("images", imagesData);
     
@@ -69,6 +71,37 @@ return images;
   }
 }
 
+//get electronics by owner (customer id)
+const getElectronicsByOwner = async (owner) => {
+  try {
+    const electronics = await db.electronics.find({ owner }).lean();
+    //get images for each electronic
+    const allPromises = electronics.map((electronic) => 
+      db.images.find({ electronicId: electronic._id }).lean());
+    
+    const images = await Promise.all(allPromises);
+    // console.log("images", images);  
+    electronics.forEach((electronic) => {
+      electronic.images = images.find((image) => image[0].electronicId.toString() === electronic._id.toString())[0];
+    }
+    );
+    console.log("electronics", electronics);
+    return electronics;
+  } catch (e) {
+    throw new InternalServerError(e.message || "Error creating electronic");
+  }
+};
+
+//change electronic status
+const updateStatus = async (id) => {
+  try {
+
+    const electronic = await db.electronics.findOneAndUpdate({_id:id}, { status: "Sold" });
+    return electronic;
+  } catch (e) {
+    throw new InternalServerError(e.message || "Error creating electronic");
+  }
+}
 
 const autocomplete = async (search) => {
   const escapedSearch = escapeRegex(search);
@@ -105,8 +138,7 @@ const autocomplete = async (search) => {
     }
   });
 
-  console.log("Term counts:", termCounts);
-
+console.log("Term counts:", termCounts);
   // Convert to array and sort
   const suggestions = Object.entries(termCounts)
     .map(([term, count]) => ({
@@ -132,6 +164,15 @@ const getElectronicsBySuggestion = async (search) => {
   }
 };
 
+//delete the electronic record
+const deleteElectronic = async (id) => {
+  try {
+    const electronic = await db.electronics.findByIdAndDelete({_id:id});
+    return electronic;
+  } catch (e) {
+    throw new InternalServerError(e.message || "Error creating electronic");
+  }
+};
 const postAdd = async (req) => {
   try {
     let payload = req.body;
@@ -162,12 +203,14 @@ const postAdd = async (req) => {
   }
 };
 
-
 module.exports = {
     createElectronic,
     getElectronicsByType,
     getElectronicsBySuggestion,
     getElectronics,
     postAdd,
-    getElectronicsById
+    getElectronicsById,
+    getElectronicsByOwner,
+    updateStatus,
+    deleteElectronic
 }

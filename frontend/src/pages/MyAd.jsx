@@ -1,68 +1,100 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
-
+import { useEffect } from 'react'
+import { useState } from 'react'
+import axios from 'axios'
+import { useUser } from '../context/UserContext'
 function MyAd() {
+
+   const [items, setItems] = useState([]);
+   const { user } = useUser();
+   const [change, setChange] = useState(false);
+   //create use eefect and call get for my ads using axios give cusimter id
+   const getMyAds = async () => {
+      try {
+      const res = await axios.get(
+         `http://localhost:3000/api/electronics/get/owner/${user._id}`
+      );
+      const images = await axios.get(
+         `http://localhost:3000/api/electronics/get/owner/${user._id}`
+      );
+      console.log(res.data.body);
+      setItems(res.data.body);
+      } catch (err) {
+      console.log(err);
+      }
+   };
+   useEffect(() => {
+      getMyAds();
+   }
+   , [user,change]);
+   console.log(user);
+
+   const ChangeStatus = async (id) => {
+      try {
+         const res = await axios.patch(
+            `http://localhost:3000/api/electronics/patch/${id}`
+         );
+         setChange(!change);
+      } catch (err) {
+         console.log(err);
+      }
+   }
+   const deleteIt = async (id) => {
+      try {
+         const res = await axios.delete(
+            `http://localhost:3000/api/electronics/delete/${id}`
+         );
+         setChange(!change);
+      } catch (err) {
+         console.log(err);
+      }
+   }  
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar search={""} />
       <div className="grid grid-cols-12 mt-[8vh]">
         <div className="col-start-3 col-span-8  p-[5vh]  ">
+         <h1 className='text-3xl font-semibold mb-5'>My Ads</h1>
+
+         {items.map((item) => (
             <div className='h-[17vh] bg-gray-100 rounded-lg flex items-center justify-around mb-[2vh] hover:cursor-pointer' onClick={()=>{}}>
             <div className="">
                       <img
-                        src="http://localhost:3000/data/1729618027428-mermaid-diagram-2024-10-20-224554.png"
+                        src={`http://localhost:3000${item.images.url}`}
                         // alt={`Preview ${index + 1}`}
                         // onClick={() => removeImage(index)} // Pass the image index to remove
                         className="h-[13vh] w-[13vh] object-cover rounded-lg shadow-lg"
                       />
                      </div> 
                      <div className='font-semibold text-lg'>
-                        I phone 6 s s
+                        {item.name}
                      </div>
                      <div className='font-medium text-lg'>
-                        Rs6000
+                        Rs{item.price}
                      </div>
-                     <button className='btn'>
-                        Not sold
-                     </button>
-                     <div className='flex flex-col '>
-                     <button className='btn min-h-[2vh] h-[4.5vh] mb-3'>
-                        Sold?
-                     </button>
-                     <button className='btn min-h-[2vh] h-[4.5vh]'>
-                        remove
-                     </button>
-                     </div>
+                     {item.status !== "Sold" ?  (<div className='flex flex-row justify-between items-center w-[15vw] '><button className='btn bg-green-500 text-white border-none hover:bg-green-500'>
+                        {item.status}
+                       </button>
+                       <div className='flex flex-col '>
+                       <button className='btn min-h-[2vh] h-[4.5vh] mb-3 bg-red-500 text-white border-none hover:bg-red-400' onClick={() => ChangeStatus(item._id)}>
+                          Sold?
+                       </button>
+                       <button className='btn min-h-[2vh] h-[4.5vh] border-none hover:bg-white hover:text-black' onClick={() => deleteIt(item._id)
+                       }>
+                          remove
+                       </button>
+                       </div></div>) :(
+                       <div className='flex w-[15vw] justify-around'>
+                       <button className='btn min-h-[2vh] h-[4.5vh] mb-3 bg-red-500 text-white border-none hover:bg-red-500'>
+                          Sold
+                       </button>
+                       </div>)}
+                     
                      
             </div>
-            <div className='h-[17vh] bg-gray-100 rounded-lg flex items-center justify-around'>
-            <div className="">
-                      <img
-                        src="http://localhost:3000/data/1729618027428-mermaid-diagram-2024-10-20-224554.png"
-                        // alt={`Preview ${index + 1}`}
-                        // onClick={() => removeImage(index)} // Pass the image index to remove
-                        className="h-[13vh] w-[13vh] object-cover rounded-lg shadow-lg"
-                      />
-                     </div> 
-                     <div className='font-semibold text-lg'>
-                        I phone 6 s s
-                     </div>
-                     <div className='font-medium text-lg'>
-                        Rs6000
-                     </div>
-                     <button className='btn'>
-                        Not sold
-                     </button>
-                     <div className='flex flex-col '>
-                     <button className='btn min-h-[2vh] h-[4.5vh] mb-3'>
-                        Sold?
-                     </button>
-                     <button className='btn min-h-[2vh] h-[4.5vh]'>
-                        remove
-                     </button>
-                     </div>
-                     
-            </div>
+         ))}
+            
         </div>
         </div>
         </div>

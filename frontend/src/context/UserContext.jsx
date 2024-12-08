@@ -32,6 +32,7 @@ export const UserProvider = ({ children }) => {
   const login = (token) => {
     cookie.set('token', token, { expires: 7 }); // Set cookie to expire in 7 days
     const decodedUser = jwtDecode(token);
+    console.log('Decoded User:', decodedUser);
     setUser({ ...decodedUser, jwt: token });
   };
 

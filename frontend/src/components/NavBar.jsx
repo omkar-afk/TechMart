@@ -17,7 +17,7 @@ function NavBar({search}) {
       <div className="navbar bg-white text-black my-px">
         <div className="flex-1">
           <a className="btn btn-ghost font-bold text-2xl mr-3" onClick={() => navigate('/')}>TechMart</a>
-          <InputAddressBox />
+
           <InputSearchBox suggest={search}/>
         </div>
         {user ? <RightSideNavbar logout={logout} /> : <a href="/signin" className="btn btn-ghost text-xl">Login</a>}
@@ -36,9 +36,7 @@ const RightSideNavbar = ({ logout }) => {
 
   return (
     <div className="flex-0">
-      <div className="tooltip tooltip-bottom mr-4" data-tip="chat">
-        <button className='btn btn-ghost pt-1'><i className="fa-regular fa-comment fa-2xl"></i></button>
-      </div>
+      
       <div className="tooltip tooltip-bottom mr-4" data-tip="Sell">
         <button className='btn btn-ghost pt-1 font-bold text-xl' onClick={()=> navigate('/postadd')}>Sell</button>
       </div>

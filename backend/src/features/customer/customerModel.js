@@ -14,7 +14,13 @@ module.exports = (mongoose)=>{
         },
         password: {
           type: String,
-          required: true,
+          required: false,
+          
+        },
+        googleLogin: {
+          type: Boolean,
+          required: false,
+          default: false,
         },
         email: {
           type: String,
