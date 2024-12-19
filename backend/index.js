@@ -7,16 +7,23 @@ const path = require('path');
 
 const app = express();
 app.use(express.json());
+
+// Modified CORS configuration
 app.use(cors({
-  origin: 'https://tech-mart-eight.vercel.app',
+  // Allow requests from your frontend domain
+  origin: process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:5173'  // Your Vite dev server
+    : ['your-production-frontend-domain.com'], // Add your production frontend domain
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use('/data', express.static(path.join(__dirname, '/src/data')))
 
 const PORT = process.env.PORT || 3000;
 
-app.use('/api',apiRouter);
+app.use('/api', apiRouter);
 app.use(errorHandler)
 
 app.listen(PORT, () => {

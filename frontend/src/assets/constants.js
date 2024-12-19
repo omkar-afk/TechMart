@@ -14,6 +14,6 @@ const ELECTRONICS_TYPE = Object.freeze({
     WASHING_MACHINES: "Washing Machines"
 });
 
-const backendUrl = "https://tech-mart-eight.vercel.app/";
+const backendUrl = "https://tech-mart-eight.vercel.app";
 
 export { backendUrl, ELECTRONICS_TYPE };
