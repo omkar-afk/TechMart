@@ -95,6 +95,9 @@ const signinCustomer = async (body) => {
         if (!customer) {
             throw new AccessRestrictedError("Customer not found for Email");
         }
+        if (customer.password === undefined) {
+            throw new AccessRestrictedError("Customer is signed up with Google");
+        }
         const result = await comparePassword(password, customer.password);
         if (result===false) {
             throw new AccessRestrictedError("Invalid Password");
@@ -107,6 +110,7 @@ const signinCustomer = async (body) => {
             return {jwt};
         }
     } catch(e) {
+        console.log(e.message); 
         if(e instanceof AccessRestrictedError){ 
             throw e;
         }

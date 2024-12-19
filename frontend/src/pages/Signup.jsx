@@ -61,7 +61,7 @@ function Signup() {
                 navigate('/');
             } catch (e) {
                 console.log(e); 
-                alert(e.response.data.message || "Something went wrong");
+                alert(e.response.status === 403 ? "Email already in use" : "Something went wrong");
             }
         } else {
             alert("Please correct the form errors before submitting.");
