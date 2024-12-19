@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import { useUser } from "../context/UserContext";
 import validator from "validator";
+import { backendUrl } from "../assets/constants";
 function Setting() {
   const [profile, setProfile] = useState(true);
   const { user, loading, login } = useUser();
@@ -79,7 +80,7 @@ function Setting() {
       console.log("Updating profile", pFormData);
       try {
         // Call API to update profile
-        const response = await fetch('http://localhost:3000/api/customer/update', {
+        const response = await fetch(`${backendUrl}/api/customer/update`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ function Setting() {
       console.log("Changing password", paFormData);
       try {
         // Call API to change password
-        const response = await fetch('http://localhost:3000/api/customer/update', {
+        const response = await fetch(`${backendUrl}/api/customer/update`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

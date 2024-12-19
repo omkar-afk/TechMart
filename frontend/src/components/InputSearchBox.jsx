@@ -16,7 +16,7 @@ function InputSearchBox({suggest}) {
     const fetchSuggestions = async () => {
       if (suggestText.length > 1) {
         try {
-          const response = await axios.get(`http://localhost:3000/api/electronics/getSuggestion/${suggestText}`);
+            const response = await axios.get(`${backendUrl}/api/electronics/getSuggestion/${suggestText}`);
           setSuggestions(response.data.body);
         } catch (err) {
           console.log(err);

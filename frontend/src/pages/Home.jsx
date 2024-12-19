@@ -32,13 +32,13 @@ function Home() {
     );
     setIsLoading(true);
     axios
-      .get(`http://localhost:3000/api/electronics/get/${search}`, {
-        params: type,
+      .get(`${backendUrl}/api/electronics/get/${search}`, {
+      params: type,
       })
       .then((res) => {
-        setIsLoading(false);
-        const duplicatedItems = res.data.body;
-        setItems(duplicatedItems);
+      setIsLoading(false);
+      const duplicatedItems = res.data.body;
+      setItems(duplicatedItems);
       });
   }, [search, checkboxes]);
 

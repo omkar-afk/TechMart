@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import axios from 'axios'
 import { useUser } from '../context/UserContext'
+import { backendUrl } from '../assets/constants'
 function MyAd() {
 
    const [items, setItems] = useState([]);
@@ -13,10 +14,10 @@ function MyAd() {
    const getMyAds = async () => {
       try {
       const res = await axios.get(
-         `http://localhost:3000/api/electronics/get/owner/${user._id}`
+         `${backendUrl}/api/electronics/get/owner/${user._id}`
       );
       const images = await axios.get(
-         `http://localhost:3000/api/electronics/get/owner/${user._id}`
+         `${backendUrl}/api/electronics/get/owner/${user._id}`
       );
       console.log(res.data.body);
       setItems(res.data.body);
@@ -32,9 +33,9 @@ function MyAd() {
 
    const ChangeStatus = async (id) => {
       try {
-         const res = await axios.patch(
-            `http://localhost:3000/api/electronics/patch/${id}`
-         );
+          const res = await axios.patch(
+            `${backendUrl}/api/electronics/patch/${id}`
+          );
          setChange(!change);
       } catch (err) {
          console.log(err);
@@ -42,9 +43,9 @@ function MyAd() {
    }
    const deleteIt = async (id) => {
       try {
-         const res = await axios.delete(
-            `http://localhost:3000/api/electronics/delete/${id}`
-         );
+          const res = await axios.delete(
+            `${backendUrl}/api/electronics/delete/${id}`
+          );
          setChange(!change);
       } catch (err) {
          console.log(err);
@@ -61,7 +62,7 @@ function MyAd() {
             <div className='h-[17vh] bg-gray-100 rounded-lg flex items-center justify-around mb-[2vh] hover:cursor-pointer' onClick={()=>{}}>
             <div className="">
                       <img
-                        src={`http://localhost:3000${item.images.url}`}
+                        src={`${backendUrl}${item.images.url}`}
                         // alt={`Preview ${index + 1}`}
                         // onClick={() => removeImage(index)} // Pass the image index to remove
                         className="h-[13vh] w-[13vh] object-cover rounded-lg shadow-lg"

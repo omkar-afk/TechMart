@@ -5,6 +5,7 @@ import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import validator from "validator";
 import GoogleLogin from '../components/GoogleLoginbut';
+import { backendUrl } from '../assets/constants';
 function Signin() {
     const [formData, setFormData] = useState({
         email: { value: '', isValid: true, message: '' },
@@ -40,7 +41,7 @@ function Signin() {
         e.preventDefault();
         if (formData.email.isValid && formData.password.isValid) {
             try {
-                const res = await axios.post('http://localhost:3000/api/customer/signin', {
+                const res = await axios.post(`${backendUrl}/api/customer/signin`, {
                     email: formData.email.value,
                     password: formData.password.value,
                     googleLogin: false

@@ -4,6 +4,7 @@ import axios from 'axios';
 import cookie from 'js-cookie';
 import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { backendUrl } from '../assets/constants';
 const Login = () => {
   const { login } = useUser();
   const navigate = useNavigate();
@@ -14,12 +15,12 @@ const Login = () => {
         // Handle the response
         const decodedToken = decodeJwt(response.credential);
         console.log('Decoded Token:', decodedToken);
-        const res = await axios.post('http://localhost:3000/api/customer/google', {
+        const res = await axios.post(`${backendUrl}/api/customer/google`, {
           firstName: decodedToken.given_name,
           lastName: decodedToken.family_name,
           email: decodedToken.email,
           googleLogin: true
-      });
+            });
       cookie.set('token', res.data.body.jwt);
       login(res.data.body.jwt);
       navigate('/');

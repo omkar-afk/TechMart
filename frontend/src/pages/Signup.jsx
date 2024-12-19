@@ -5,6 +5,7 @@ import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import validator from "validator";
 import GoogleLogin from '../components/GoogleLoginbut';
+import { backendUrl } from '../assets/constants';
 function Signup() {
     const [formData, setFormData] = useState({
         firstName: { value: '', isValid: true, message: '' },
@@ -55,7 +56,7 @@ function Signup() {
                     email: formData.email.value,
                     password: formData.password.value
                 };
-                const res = await axios.post('http://localhost:3000/api/customer/signup', data);
+                const res = await axios.post(`${backendUrl}/customer/signup`, data);
                 cookie.set('token', res.data.body.jwt);
                 login(res.data.body.jwt);
                 navigate('/');
