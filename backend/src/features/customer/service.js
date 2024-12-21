@@ -43,7 +43,8 @@ const updateCustomer = async (body) => {
         const {currentpassword, password} = main;
         if(main.currentpassword){
             const customer = await db.customer.findOne({_id});
-            const result = await comparePassword(customer.password, currentpassword);
+
+            const result = await comparePassword(currentpassword,customer.password );
 
             if(result===false){
                 throw new AccessRestrictedError("Invalid Password");
@@ -55,7 +56,7 @@ const updateCustomer = async (body) => {
         customer = await db.customer.findOne({_id}).lean();
         console.log(customer);
         const jwt = generateToken(customer)
-
+        
         return {jwt};
     }
     catch (e) {

@@ -136,7 +136,7 @@ function Setting() {
         });
         let newResponse = await response.json();
         console.log(newResponse);
-        if (newResponse.status === 200) {
+        if (newResponse.status === 200 || newResponse.StatusCode === 200) {
           const updatedUser = newResponse.body;
           //encode the jwt token
           login(updatedUser.jwt); // Update user context with new data
