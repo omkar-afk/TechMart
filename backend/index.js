@@ -14,7 +14,7 @@ app.use(cors({
   origin: process.env.NODE_ENV === 'development' 
     ? 'http://localhost:5173'  // Your Vite dev server
     : ['https://tech-mart-4kmn.vercel.app'], // Add your production frontend domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
