@@ -31,7 +31,12 @@ const getElectronicsByType = async (types,search) => {
          search = escapeRegex(search); 
         const electronics = await db.electronics.find({type:{
             $in:types
-        },name:{$regex:search,$options:'i'}});
+        },name:{$regex:search,$options:'i'}}).lean();
+        const promisesAll = electronics.map((electronic) => db.images.find({ electronicId: electronic._id }).limit(1));
+        const images = await Promise.all(promisesAll);
+        electronics.forEach((electronic) => {
+          electronic.images = images.find((image) => image[0].electronicId.toString() === electronic._id.toString())[0];
+        });
         return electronics;
     }catch(e){
         throw new InternalServerError(e.message ||"Error creating electronic");
