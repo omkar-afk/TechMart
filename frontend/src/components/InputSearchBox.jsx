@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState ,useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { backendUrl } from '../assets/constants';
 function InputSearchBox({suggest}) {
   const [suggestText, setSuggestText] = useState(suggest||"");
   const [suggestions, setSuggestions] = useState([]);
@@ -28,7 +28,7 @@ function InputSearchBox({suggest}) {
 
     fetchSuggestions();
   }, [suggestText]);
-
+  // console.log(suggestText)
   const handleBlur = () => {
     // Delay the blur action to allow the click event on the <li> to be registered
     setTimeout(() => setFocus(false), 200);

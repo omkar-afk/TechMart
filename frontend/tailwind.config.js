@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import daisyui from 'daisyui';
+
 export default {
   content: [
     "./index.html",
@@ -12,14 +14,13 @@ export default {
     },
   },
   plugins: [
-    require('daisyui'),
-      function ({ addUtilities }) {
-        addUtilities({
-          '.no-outline': {
-            outline: 'none !important',
-            // border: 'none !important',
-          },
-        })
-      },
-    ],
-}
+    daisyui,
+    function ({ addUtilities }) {
+      addUtilities({
+        '.no-outline': {
+          outline: 'none !important',
+        },
+      });
+    },
+  ],
+};

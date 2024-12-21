@@ -16,4 +16,5 @@ const ELECTRONICS_TYPE = Object.freeze({
 
 const backendUrl = "https://tech-mart-eight.vercel.app";
 
+
 export { backendUrl, ELECTRONICS_TYPE };
