@@ -29,7 +29,7 @@ function Product() {
                 {images.map((image, index) => (
                   <div key={index} id={`item${index + 1}`} className="carousel-item w-full">
                     <img
-                      src={`${backendUrl}${image.url}`}
+                      src={`${image.url}`}
                       className="object-contain object-center w-full h-full rounded-lg"
                     />
                   </div>

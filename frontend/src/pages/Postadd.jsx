@@ -76,14 +76,14 @@ function Postadd() {
         // Call API to submit form data
         const uploadResponses = await Promise.all((selectedFiles || []).map((file) => {
           const nformData = new FormData();
-          nformData.append('file', file);
+          nformData.append('image', file);
           return axios.post(`${backendUrl}/api/upload`, nformData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
         }));
-        const images = uploadResponses.map((res) => res.data.filePath);
+        const images = uploadResponses.map((res) => res.data.imageUrl);
         console.log(images)
         let newFormData = {};
         Object.keys(formData).forEach((key) => {

@@ -82,7 +82,7 @@ function Home() {
             return (
               <div className="card bg-white shadow-md outline-black text-black ">
                 <img
-                  src={`${backendUrl}${item.images.url}`}
+                  src={`${item.images.url}`}
                   className="aspect-[4/3] object-cover  rounded-2xl mx-4 mt-4"
                 />
                 <div className="card-body p-4 pt-3">

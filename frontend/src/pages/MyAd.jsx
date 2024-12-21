@@ -62,7 +62,7 @@ function MyAd() {
             <div className='h-[17vh] bg-gray-100 rounded-lg flex items-center justify-around mb-[2vh] hover:cursor-pointer' onClick={()=>{}}>
             <div className="">
                       <img
-                        src={`${backendUrl}${item.images.url}`}
+                        src={`${item.images.url}`}
                         // alt={`Preview ${index + 1}`}
                         // onClick={() => removeImage(index)} // Pass the image index to remove
                         className="h-[13vh] w-[13vh] object-cover rounded-lg shadow-lg"
