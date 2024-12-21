@@ -71,11 +71,11 @@ const googleSigninCustomer = async (body) => {
     try {
         const { email } = body;
         let customer = await db.customer.findOne({ email });
-        console.log(customer);
+
         if (!customer) {
             customer = await db.customer.create(body);
         }
-        console.log(customer);
+
         const deepCopyCustomer = JSON.parse(JSON.stringify(customer));
         if(deepCopyCustomer.password){
             deepCopyCustomer.password = true;
