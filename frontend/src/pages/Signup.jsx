@@ -56,7 +56,7 @@ function Signup() {
                     email: formData.email.value,
                     password: formData.password.value
                 };
-                const res = await axios.post(`${backendUrl}/customer/signup`, data);
+                const res = await axios.post(`${backendUrl}/api/customer/signup`, data);
                 cookie.set('token', res.data.body.jwt);
                 login(res.data.body.jwt);
                 navigate('/');
